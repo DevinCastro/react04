@@ -1,14 +1,17 @@
-import React from 'react'
+import React, { useContext } from 'react'
+import GifContext from '../../utils/GifContext'
 
-const Form = props => {
+const Form = () => {
+
+  const { search, handleInputChange, handleSearchGiphy } = useContext(GifContext)
   return (
     <form>
       <p>
         <label htmlFor="search">search</label>
-        <input type="text" name="search" value={props.search} onChange={props.handleInputChange} />
+        <input type="text" name="search" value={search} onChange={handleInputChange} />
       </p>
       <p>
-        <button onClick={props.handleSearchGiphy}>Search</button>
+        <button onClick={handleSearchGiphy}>Search</button>
       </p>
     </form>
   )

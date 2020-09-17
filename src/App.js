@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios'
 import Card from './components/Card'
 import Form from './components/Form'
+import GifContext from './utils/GifContext'
 
 const App = () => {
 
@@ -40,19 +41,13 @@ const App = () => {
   return (
     <>
     <h1>Giphy App</h1>
-
-    <Form 
-      search={gifState.search}
-      handleInputChange={gifState.handleInputChange}
-      handleSearchGiphy={gifState.handleSearchGiphy}
-    />
-
-
-
+    <GifContext.Provider value={gifState}>
+    <Form />
     {/* turnary */}
     {
-      gifState.gif.title ? <Card gif={gifState.gif}/> : null
+      gifState.gif.title ? <Card /> : null
     }
+    </GifContext.Provider>
 
     </>
   )
