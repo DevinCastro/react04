@@ -1,26 +1,61 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios'
+import Card from './components/Card'
+import Form from './components/Form'
 
-function App() {
+const App = () => {
+
+  const [gifState, setGifState] = useState({
+    search: '',
+    gif: { }
+  })
+
+  gifState.handleInputChange = event => {
+    setGifState({ ...gifState, [event.target.name]: event.target.value})
+  }
+
+  gifState.handleSearchGiphy = event => {
+    event.preventDefault()
+    axios.get(`https://api.giphy.com/v1/gifs/search?q=${gifState.search}&api_key=0E0ghVQdiqggRcoSoPiZAixFKPxb92XR&limit=5`)
+      .then(({ data }) => {
+        // console.log(data)
+        let gif = data.data.[Math.floor(Math.random() * data.data.length)]
+        console.log(gif)
+        setGifState({ ...gifState, gif })
+      })
+      .catch(err => console.error(err))
+  }
+
+  useEffect(() => {
+    axios.get(`https://api.giphy.com/v1/gifs/search?q=dogs&api_key=0E0ghVQdiqggRcoSoPiZAixFKPxb92XR&limit=5`)
+      .then(({ data }) => {
+        // console.log(data)
+        let gif = data.data.[Math.floor(Math.random() * data.data.length)]
+        console.log(gif)
+        setGifState({ ...gifState, gif})
+      })
+      .catch(err => console.error(err))
+  }, [])
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+    <>
+    <h1>Giphy App</h1>
+
+    <Form 
+      search={gifState.search}
+      handleInputChange={gifState.handleInputChange}
+      handleSearchGiphy={gifState.handleSearchGiphy}
+    />
+
+
+
+    {/* turnary */}
+    {
+      gifState.gif.title ? <Card gif={gifState.gif}/> : null
+    }
+
+    </>
+  )
 }
 
 export default App;
